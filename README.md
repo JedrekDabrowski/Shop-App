@@ -1,6 +1,7 @@
 # Shop-App
-Shop App made in React Native.
+Shop App made in React Native.</br>
 Not finished yet.
-TODO:
--change dummy data to database
--add log in users
+</br>
+TODO:</br>
+-change dummy data to database</br>
+-add log in users</br>
