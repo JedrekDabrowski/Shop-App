@@ -114,7 +114,7 @@ const EditProductScreen = (props) => {
     props.navigation.setParams({ submit: submitHandler });
   }, [submitHandler]);
 
-  const inputChangeChandler = useCallback(
+  const inputChangeHandler = useCallback(
     (inputIdentifier, inputValue, inputIsValid) => {
       dispatchFormState({
         type: 'UPDATE',
@@ -149,7 +149,7 @@ const EditProductScreen = (props) => {
             autoCapitalize='sentences'
             autoCorrect
             returnKeyType='next'
-            onInputChange={inputChangeChandler}
+            onInputChange={inputChangeHandler}
             initialValue={editedProduct ? editedProduct.title : ''}
             initiallyValid={!!editedProduct}
             required
@@ -159,7 +159,7 @@ const EditProductScreen = (props) => {
             label='Image Url'
             errorMsg='Please enter a valid image Url.'
             returnKeyType='next'
-            onInputChange={inputChangeChandler}
+            onInputChange={inputChangeHandler}
             initialValue={editedProduct ? editedProduct.imageUrl : ''}
             initiallyValid={!!editedProduct}
             required
@@ -171,7 +171,7 @@ const EditProductScreen = (props) => {
               errorMsg='Please enter a valid price.'
               returnKeyType='next'
               keyboardType='decimal-pad'
-              onInputChange={inputChangeChandler}
+              onInputChange={inputChangeHandler}
               required
               min={0.1}
             />
@@ -184,7 +184,7 @@ const EditProductScreen = (props) => {
             autoCorrect
             multiline
             numberOfLines={3}
-            onInputChange={inputChangeChandler}
+            onInputChange={inputChangeHandler}
             initialValue={editedProduct ? editedProduct.description : ''}
             initiallyValid={!!editedProduct}
             required

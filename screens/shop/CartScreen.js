@@ -37,7 +37,7 @@ const CartScreen = (props) => {
 
   const sendOrderHandler = async () => {
     setIsLoading(true);
-    await dispatch(cartActions.removeFromCart(itemData.item.productId));
+    await dispatch(ordersActions.addOrder(cartItems, cartTotalAmount));
     setIsLoading(false);
   };
 
@@ -59,7 +59,7 @@ const CartScreen = (props) => {
             title='Order Now'
             disabled={cartItems.length === 0}
             onPress={() => {
-              dispatch(ordersActions.addOrder(cartItems, cartTotalAmount));
+              dispatch(sendOrderHandler);
             }}
           />
         )}
@@ -74,7 +74,9 @@ const CartScreen = (props) => {
             price={itemData.item.productPrice}
             amount={itemData.item.sum}
             delete
-            onRemove={sendOrderHandler}
+            onRemove={dispatch(
+              cartActions.removeFromCart(itemData.item.productId)
+            )}
           />
         )}
       />

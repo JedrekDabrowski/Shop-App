@@ -5,6 +5,7 @@ import {
   ActivityIndicator,
   View,
   StyleSheet,
+  Text,
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
@@ -29,8 +30,18 @@ const OrdersScreen = (props) => {
 
   if (isLoading) {
     return (
-      <View style={styles.center}>
+      <View style={styles.centered}>
         <ActivityIndicator size='large' color={Colors.primary} />
+      </View>
+    );
+  }
+
+  if (orders.length === 0) {
+    return (
+      <View style={styles.centered}>
+        <Text style={styles.info}>
+          No orders found. maybe start ordering some products?
+        </Text>
       </View>
     );
   }
@@ -69,10 +80,13 @@ OrdersScreen.navigationOptions = (navData) => {
 };
 
 const styles = StyleSheet.create({
-  centerd: {
+  centered: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  info: {
+    fontFamily: 'open-sans',
   },
 });
 
