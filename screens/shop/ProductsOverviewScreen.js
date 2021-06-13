@@ -49,10 +49,10 @@ const ProductsOverviewScreen = (props) => {
   }, [dispatch, loadProducts]);
 
   useEffect(() => {
-    const reFetch = props.navigation.addListener('willFocus', loadProducts());
+    const unsubscribe = props.navigation.addListener('focus', loadProducts);
 
     return () => {
-      reFetch.remove();
+      unsubscribe();
     };
   }, [loadProducts]);
 
@@ -120,7 +120,7 @@ const ProductsOverviewScreen = (props) => {
   );
 };
 
-ProductsOverviewScreen.navigationOptions = (navData) => {
+export const overviewScreenOptions = (navData) => {
   return {
     headerTitle: 'All Products',
     headerRight: () => (

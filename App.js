@@ -6,7 +6,7 @@ import * as Font from 'expo-font';
 import ReduxThunk from 'redux-thunk';
 //import { composeWithDevTools } from 'redux-devtools-extension';
 
-import NavigationContainer from './navigation/ShopNavigator';
+import AppNavigator from './navigation/AppNavigator';
 import productsReducer from './store/reducers/products';
 import cartReducer from './store/reducers/cart';
 import ordersReducer from './store/reducers/orders';
@@ -38,14 +38,14 @@ export default function App() {
         onFinish={() => {
           setFontLoaded(true);
         }}
-        onError={console.warn}
+        onError={console.warn('Fonts load proces has crashed.')}
       />
     );
   }
 
   return (
     <Provider store={store}>
-      <NavigationContainer />
+      <AppNavigator />
     </Provider>
   );
 }

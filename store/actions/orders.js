@@ -4,7 +4,7 @@ export const ADD_ORDER = 'ADD_ORDER';
 export const SET_ORDERS = 'SET_ORDERS';
 
 export const fetchOrders = () => {
-  return async (dispatch) => {
+  return async (dispatch, getState) => {
     const userId = getState().auth.userId;
     try {
       const response = await fetch(
@@ -57,7 +57,6 @@ export const addOrder = (cartItems, totalAmount) => {
       throw new Error('An error accured');
     }
     const resData = await response.json();
-
     dispatch({
       type: ADD_ORDER,
       orderData: {

@@ -17,7 +17,9 @@ import * as ordersActions from '../../store/actions/orders';
 
 const CartScreen = (props) => {
   const [isLoading, setIsLoading] = useState(false);
+
   const cartTotalAmount = useSelector((state) => state.cart.totalAmount);
+
   const cartItems = useSelector((state) => {
     const tranformedCartItems = [];
     for (const key in state.cart.items) {
@@ -35,13 +37,18 @@ const CartScreen = (props) => {
     );
   });
 
+  const dispatch = useDispatch();
   const sendOrderHandler = async () => {
     setIsLoading(true);
-    await dispatch(ordersActions.addOrder(cartItems, cartTotalAmount));
+    try {
+      await dispatch(ordersActions.addOrder(cartItems, cartTotalAmount));
+    } catch (error) {
+      console.log(error.message);
+    }
+
     setIsLoading(false);
   };
 
-  const dispatch = useDispatch();
   return (
     <View style={styles.screen}>
       <Card style={styles.summary}>
@@ -58,9 +65,7 @@ const CartScreen = (props) => {
             color={Colors.accent}
             title='Order Now'
             disabled={cartItems.length === 0}
-            onPress={() => {
-              dispatch(sendOrderHandler);
-            }}
+            onPress={sendOrderHandler}
           />
         )}
       </Card>
@@ -74,9 +79,9 @@ const CartScreen = (props) => {
             price={itemData.item.productPrice}
             amount={itemData.item.sum}
             delete
-            onRemove={dispatch(
-              cartActions.removeFromCart(itemData.item.productId)
-            )}
+            onRemove={() => {
+              dispatch(cartActions.removeFromCart(itemData.item.productId));
+            }}
           />
         )}
       />
@@ -104,7 +109,7 @@ const styles = StyleSheet.create({
   },
 });
 
-CartScreen.navigationOptions = {
+export const cartOptionsScreen = {
   headerTitle: 'Your Cart',
 };
 

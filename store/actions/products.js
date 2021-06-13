@@ -45,12 +45,15 @@ export const fetchProducts = () => {
 export const deleteProduct = (productId) => {
   return async (dispatch, getState) => {
     const token = getState().auth.token;
-    await fetch(
+    const response = await fetch(
       `https://shop-app-f21a8-default-rtdb.firebaseio.com/products${productId}.json?auth=${token}`,
       {
         method: 'DELETE',
       }
     );
+    if (!response.ok) {
+      throw new Error('Something went wrong!');
+    }
     dispatch({ type: DELETE_PRODUCT, productId: productId });
   };
 };
