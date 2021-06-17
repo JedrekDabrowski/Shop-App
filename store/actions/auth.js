@@ -83,11 +83,10 @@ export const login = (email, password) => {
       throw new Error(message);
     }
     resData = await response.json();
-
     dispatch(
       authenticate(
         resData.localId,
-        resData.token,
+        resData.idToken,
         parseInt(resData.expiresIn) * 1000
       )
     );

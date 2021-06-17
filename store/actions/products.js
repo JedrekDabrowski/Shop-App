@@ -1,3 +1,6 @@
+import * as Notifications from 'expo-notifications';
+import * as Permissions from 'expo-permissions';
+
 import Product from '../../models/product';
 
 export const DELETE_PRODUCT = 'DELETE_PRODUCT';
@@ -24,6 +27,7 @@ export const fetchProducts = () => {
           new Product(
             key,
             resData[key].ownerId,
+            resData[key].pushToken,
             resData[key].title,
             resData[key].imageUrl,
             resData[key].description,
@@ -46,7 +50,7 @@ export const deleteProduct = (productId) => {
   return async (dispatch, getState) => {
     const token = getState().auth.token;
     const response = await fetch(
-      `https://shop-app-f21a8-default-rtdb.firebaseio.com/products${productId}.json?auth=${token}`,
+      `https://shop-app-f21a8-default-rtdb.firebaseio.com/products/${productId}.json?auth=${token}`,
       {
         method: 'DELETE',
       }
@@ -60,6 +64,16 @@ export const deleteProduct = (productId) => {
 
 export const createProduct = (title, description, imageUrl, price) => {
   return async (dispatch, getState) => {
+    let pushToken;
+    let statusObj = await Permissions.getAsync(Permissions.NOTIFICATIONS);
+    if (statusObj.status !== 'granted') {
+      statusObj = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+    }
+    if (statusObj.status !== 'granted') {
+      pushToken = null;
+    } else {
+      pushToken = await Notifications.getExpoPushTokenAsync().data;
+    }
     const token = getState().auth.token;
     const userId = getState().auth.userId;
     const response = await fetch(
@@ -72,6 +86,7 @@ export const createProduct = (title, description, imageUrl, price) => {
           imageUrl,
           price,
           ownerId: userId,
+          ownerPushToken: pushToken,
         }),
         headers: {
           'Content-Type': 'application/json',
@@ -89,6 +104,7 @@ export const createProduct = (title, description, imageUrl, price) => {
         imageUrl,
         price,
         ownerId: userId,
+        pushToken: pushToken,
       },
     });
   };

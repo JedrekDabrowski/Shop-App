@@ -16,9 +16,8 @@ export const fetchOrders = () => {
       }
       const resData = await response.json();
       const loadedOrders = [];
-
       for (const key in resData) {
-        loadedProducts.push(
+        loadedOrders.push(
           new Order(
             key,
             resData[key].cartItems,
@@ -66,5 +65,26 @@ export const addOrder = (cartItems, totalAmount) => {
         date: date,
       },
     });
+    for (const cartItem of cartItems) {
+      const pushToken = cartItem.productPushToken;
+      try {
+        await fetch('https://exp.host/--/api/v2/push/send', {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json',
+            'Accept-encoding': 'gzip, deflate',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            to: pushToken,
+            title: 'Order was placed!',
+            body: cartItem.productTitle,
+          }),
+        });
+      } catch (error) {
+        console.log(error);
+        throw new Error(error.message);
+      }
+    }
   };
 };
