@@ -1,7 +1,7 @@
 import * as Notifications from 'expo-notifications';
 import * as Permissions from 'expo-permissions';
 
-import Product from '../../models/product';
+import Product from '../../models/classes/product';
 
 export const DELETE_PRODUCT = 'DELETE_PRODUCT';
 export const CREATE_PRODUCT = 'CREATE_PRODUCT';
@@ -9,7 +9,7 @@ export const UPDATE_PRODUCT = 'UPDATE_PRODUCT';
 export const SET_PRODUCTS = 'SET_PRODUCTS';
 
 export const fetchProducts = () => {
-  return async (dispatch, getState) => {
+  return async (dispatch: Function, getState: Function) => {
     const userId = getState().auth.userId;
     try {
       const response = await fetch(
@@ -46,8 +46,8 @@ export const fetchProducts = () => {
   };
 };
 
-export const deleteProduct = (productId) => {
-  return async (dispatch, getState) => {
+export const deleteProduct = (productId: string) => {
+  return async (dispatch: Function, getState: Function) => {
     const token = getState().auth.token;
     const response = await fetch(
       `https://shop-app-f21a8-default-rtdb.firebaseio.com/products/${productId}.json?auth=${token}`,
@@ -62,8 +62,13 @@ export const deleteProduct = (productId) => {
   };
 };
 
-export const createProduct = (title, description, imageUrl, price) => {
-  return async (dispatch, getState) => {
+export const createProduct = (
+  title: string,
+  description: string,
+  imageUrl: string,
+  price: number
+) => {
+  return async (dispatch: Function, getState: Function) => {
     let pushToken;
     let statusObj = await Permissions.getAsync(Permissions.NOTIFICATIONS);
     if (statusObj.status !== 'granted') {
@@ -72,7 +77,7 @@ export const createProduct = (title, description, imageUrl, price) => {
     if (statusObj.status !== 'granted') {
       pushToken = null;
     } else {
-      pushToken = await Notifications.getExpoPushTokenAsync().data;
+      pushToken = (await Notifications.getExpoPushTokenAsync()).data;
     }
     const token = getState().auth.token;
     const userId = getState().auth.userId;
@@ -110,8 +115,13 @@ export const createProduct = (title, description, imageUrl, price) => {
   };
 };
 
-export const updateProduct = (id, title, description, imageUrl) => {
-  return async (dispatch, getState) => {
+export const updateProduct = (
+  id: string,
+  title: string,
+  description: string,
+  imageUrl: string
+) => {
+  return async (dispatch: Function, getState: Function) => {
     const token = getState().auth.token;
     await fetch(
       `https://shop-app-f21a8-default-rtdb.firebaseio.com/products/${id}.json?auth=${token}`,

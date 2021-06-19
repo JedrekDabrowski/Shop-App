@@ -6,7 +6,7 @@ import { useDispatch } from 'react-redux';
 import Colors from '../constatans/Colors';
 import * as authActions from '../store/actions/auth';
 
-const StartupScreen = (props) => {
+const StartupScreen = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     const tryLogin = async () => {

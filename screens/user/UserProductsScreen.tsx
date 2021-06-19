@@ -10,21 +10,25 @@ import {
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
+import { NavigationParams } from 'react-navigation';
 
 import ProductItem from '../../components/shop/ProductItem';
 import HeaderButton from '../../components/ui/HeaderButton';
 import Colors from '../../constatans/Colors';
 import * as productsActions from '../../store/actions/products';
+import { RootState } from '../../store/store';
 
-const UserProductsScreen = (props) => {
-  const userProducts = useSelector((state) => state.products.userProducts);
+const UserProductsScreen: React.FC<NavigationParams> = (props) => {
+  const userProducts = useSelector(
+    (state: RootState) => state.products.userProducts
+  );
   const dispatch = useDispatch();
 
-  const editProductHandler = (id) => {
+  const editProductHandler = (id: string) => {
     props.navigation.navigate('EditProduct', { productId: id });
   };
 
-  const deleteHandler = (id) => {
+  const deleteHandler = (id: string) => {
     Alert.alert('Are you sure?', 'Do you really want to delete this item?', [
       { text: 'No', style: 'default' },
       {
@@ -77,7 +81,7 @@ const UserProductsScreen = (props) => {
   );
 };
 
-export const userProductsScreenOptions = (navData) => {
+export const userProductsScreenOptions = ({ navigation }: any) => {
   return {
     headerTitle: 'Your Products',
     headerLeft: () => (
@@ -86,7 +90,7 @@ export const userProductsScreenOptions = (navData) => {
           title='Menu'
           iconName={Platform.OS === 'android' ? 'md-menu' : 'ios-menu'}
           onPress={() => {
-            navData.navigation.toggleDrawer();
+            navigation.toggleDrawer();
           }}
         />
       </HeaderButtons>
@@ -97,7 +101,7 @@ export const userProductsScreenOptions = (navData) => {
           title='Create'
           iconName={Platform.OS === 'android' ? 'md-create' : 'ios-create'}
           onPress={() => {
-            navData.navigation.navigate('EditProduct');
+            navigation.navigate('EditProduct');
           }}
         />
       </HeaderButtons>

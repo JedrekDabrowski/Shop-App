@@ -10,21 +10,28 @@ import {
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
+import {
+  // NavigationScreenConfigProps,
+  NavigationParams,
+} from 'react-navigation';
 
 import ProductItem from '../../components/shop/ProductItem';
 import HeaderButton from '../../components/ui/HeaderButton';
 import Colors from '../../constatans/Colors';
 import * as cartActions from '../../store/actions/cart';
 import * as productsActions from '../../store/actions/products';
+import { RootState } from '../../store/store';
 
-const ProductsOverviewScreen = (props) => {
+const ProductsOverviewScreen: React.FC<NavigationParams> = (props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [error, setError] = useState(false);
-  const products = useSelector((state) => state.products.availableProducts);
+  const products = useSelector(
+    (state: RootState) => state.products.availableProducts
+  );
   const dispatch = useDispatch();
 
-  const selectItemHandler = (id, title) => {
+  const selectItemHandler = (id: string, title: string) => {
     props.navigation.navigate('ProductDetail', {
       productId: id,
       productTitle: title,
@@ -32,7 +39,7 @@ const ProductsOverviewScreen = (props) => {
   };
 
   const loadProducts = useCallback(async () => {
-    setError(null);
+    setError(false);
     setIsRefreshing(true);
     try {
       await dispatch(productsActions.fetchProducts());
@@ -58,7 +65,7 @@ const ProductsOverviewScreen = (props) => {
 
   if (error) {
     return (
-      <View style={styles.centerd}>
+      <View style={styles.centered}>
         <Text>An error occurred!</Text>
         <Button
           title='Try again'
@@ -71,7 +78,7 @@ const ProductsOverviewScreen = (props) => {
 
   if (isLoading) {
     return (
-      <View style={styles.center}>
+      <View style={styles.centered}>
         <ActivityIndicator size='large' color={Colors.primary} />
       </View>
     );
@@ -79,7 +86,7 @@ const ProductsOverviewScreen = (props) => {
 
   if (!isLoading && products.lenghth === 0) {
     return (
-      <View style={styles.centerd}>
+      <View style={styles.centered}>
         <Text>No products found. Maybe stary adding some?</Text>
       </View>
     );
@@ -120,7 +127,7 @@ const ProductsOverviewScreen = (props) => {
   );
 };
 
-export const overviewScreenOptions = (navData) => {
+export const overviewScreenOptions = ({ navigation }: any) => {
   return {
     headerTitle: 'All Products',
     headerRight: () => (
@@ -129,7 +136,7 @@ export const overviewScreenOptions = (navData) => {
           title='Cart'
           iconName={Platform.OS === 'android' ? 'md-cart' : 'ios-cart'}
           onPress={() => {
-            navData.navigation.navigate('Cart');
+            navigation.navigate('Cart');
           }}
         />
       </HeaderButtons>
@@ -141,7 +148,7 @@ export const overviewScreenOptions = (navData) => {
           title='Menu'
           iconName={Platform.OS === 'android' ? 'md-menu' : 'ios-menu'}
           onPress={() => {
-            navData.navigation.toggleDrawer();
+            navigation.toggleDrawer();
           }}
         />
       </HeaderButtons>
@@ -150,7 +157,7 @@ export const overviewScreenOptions = (navData) => {
 };
 
 const styles = StyleSheet.create({
-  centerd: {
+  centered: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',

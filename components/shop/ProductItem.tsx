@@ -1,18 +1,31 @@
-import React from 'react';
+import React, { ComponentType } from 'react';
 import {
   View,
   Text,
   Image,
   StyleSheet,
   TouchableOpacity,
+  TouchableOpacityProps,
   TouchableNativeFeedback,
+  TouchableNativeFeedbackProps,
   Platform,
 } from 'react-native';
 
 import Card from '../ui/Card';
 
-const ProductItem = (props) => {
-  let TouchableComponent = TouchableOpacity;
+interface ProductItemProps {
+  image: string;
+  title: string;
+  price: number;
+  onSelect: () => void;
+}
+//TouchableComponent Type
+const ProductItem: React.FC<ProductItemProps> = (props) => {
+  let TouchableComponent: ComponentType<
+    TouchableOpacityProps | TouchableNativeFeedbackProps
+  >;
+  TouchableComponent = TouchableOpacity;
+
   if (Platform.OS === 'android' && Platform.Version >= 21) {
     TouchableComponent = TouchableNativeFeedback;
   }

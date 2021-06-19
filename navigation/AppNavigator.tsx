@@ -4,10 +4,13 @@ import { NavigationContainer } from '@react-navigation/native';
 
 import { ShopNavigator, AuthNavigator } from './ShopNavigator';
 import StartupScreen from '../screens/StartupScreen';
+import { RootState } from '../store/store';
 
-const AppNavigator = (props) => {
-  const isAuth = useSelector((state) => !!state.auth.token);
-  const didTryAutoLogin = useSelector((state) => state.auth.didTryAutoLogin);
+const AppNavigator = () => {
+  const isAuth = useSelector((state: RootState) => !!state.auth.token);
+  const didTryAutoLogin = useSelector(
+    (state: RootState) => state.auth.didTryAutoLogin
+  );
 
   return (
     <NavigationContainer>

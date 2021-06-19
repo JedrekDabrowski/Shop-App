@@ -10,13 +10,39 @@ import {
 } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { useSelector, useDispatch } from 'react-redux';
+import { NavigationParams } from 'react-navigation';
 
 import HeaderButton from '../../components/ui/HeaderButton';
 import * as productsActions from '../../store/actions/products';
 import Input from '../../components/ui/Input';
 import Colors from '../../constatans/Colors';
+import { RootState } from '../../store/store';
+import Product from '../../models/classes/product';
 
-const formReducer = (state, action) => {
+interface FormState {
+  inputValues: {
+    title: string;
+    imageUrl: string;
+    description: string;
+    price: string;
+  };
+  inputValidated: {
+    title: boolean;
+    imageUrl: boolean;
+    description: boolean;
+    price: boolean;
+  };
+  formIsValid: boolean;
+}
+
+interface FormAction {
+  type: string;
+  input: string;
+  value: string;
+  isValid: boolean;
+}
+
+const formReducer = (state: FormState, action: FormAction) => {
   if (action.type === 'UPDATE') {
     const updatedValues = {
       ...state.inputValues,
@@ -27,9 +53,9 @@ const formReducer = (state, action) => {
       [action.input]: action.isValid,
     };
     let updatedFormIsValid = true;
-    for (const key in updatedInputValidated) {
-      updatedFormIsValid = updatedFormIsValid && updatedInputValidated[key];
-    }
+    // for (const key in updatedInputValidated) {
+    //   updatedFormIsValid = updatedFormIsValid && updatedInputValidated[key];
+    // }
     return {
       formIsValid: updatedFormIsValid,
       inputValidated: updatedInputValidated,
@@ -39,13 +65,13 @@ const formReducer = (state, action) => {
   return state;
 };
 
-const EditProductScreen = (props) => {
+const EditProductScreen: React.FC<NavigationParams> = (props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(false);
 
   const prodId = props.route.params ? props.route.params.productId : null;
-  const editedProduct = useSelector((state) =>
-    state.products.userProducts.find((prod) => prod.id === prodId)
+  const editedProduct = useSelector((state: RootState) =>
+    state.products.userProducts.find((prod: Product) => prod.id === prodId)
   );
   const dispatch = useDispatch();
 
@@ -66,10 +92,12 @@ const EditProductScreen = (props) => {
   });
 
   useEffect(() => {
-    if (error) {
-      Alert.alert('An error occured!', error, {
-        text: 'Okay',
-      });
+    if (typeof error === 'string') {
+      Alert.alert('An error occured!', error, [
+        {
+          text: 'Okay',
+        },
+      ]);
     }
   }, [error]);
 
@@ -80,7 +108,7 @@ const EditProductScreen = (props) => {
       ]);
       return;
     }
-    setError(null);
+    setError(false);
     setIsLoading(true);
     try {
       if (editedProduct) {
@@ -103,8 +131,8 @@ const EditProductScreen = (props) => {
         );
       }
       props.navigation.goBack();
-    } catch (error) {
-      setError(error.messege);
+    } catch (err) {
+      setError(err.message);
     }
 
     setIsLoading(false);
@@ -140,7 +168,7 @@ const EditProductScreen = (props) => {
 
   if (isLoading) {
     return (
-      <View style={styles.center}>
+      <View style={styles.centered}>
         <ActivityIndicator size='large' color={Colors.primary} />
       </View>
     );
@@ -149,7 +177,7 @@ const EditProductScreen = (props) => {
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
-      behavior={Platform.OS === 'ios' ? 'padding' : null}
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       keyboardVerticalOffset={Platform.select({ ios: 0, android: 500 })}
     >
       <ScrollView>
@@ -208,8 +236,8 @@ const EditProductScreen = (props) => {
   );
 };
 
-export const editProdcutsScreenOptions = (navData) => {
-  const routeParams = navData.route.params ? navData.route.params : {};
+export const editProdcutsScreenOptions = ({ navigation }: any) => {
+  const routeParams = navigation.route.params ? navigation.route.params : {};
   return {
     headerTitle: routeParams.productId ? 'Edit Product' : 'Add Product',
   };
@@ -219,7 +247,7 @@ const styles = StyleSheet.create({
   form: {
     margin: 20,
   },
-  centerd: {
+  centered: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',

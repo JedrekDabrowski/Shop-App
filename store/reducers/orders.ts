@@ -1,11 +1,16 @@
-import Order from '../../models/order';
+import Order from '../../models/classes/order';
 import { ADD_ORDER, SET_ORDERS } from '../actions/orders';
+import { AnyAction } from 'redux';
 
-const initialState = {
+interface State {
+  orders: Order[];
+}
+
+const initialState: State = {
   orders: [],
 };
 
-export default (state = initialState, action) => {
+export default (state = initialState, action: AnyAction) => {
   switch (action.type) {
     case SET_ORDERS:
       return {

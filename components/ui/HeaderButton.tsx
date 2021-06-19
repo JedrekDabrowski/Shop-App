@@ -6,7 +6,7 @@ import { Ionicons } from '@expo/vector-icons';
 import Colors from '../../constatans/Colors';
 import { Platform } from 'react-native';
 
-const CustomHeaderButton = (props) => {
+const CustomHeaderButton = (props: any) => {
   return (
     <HeaderButton
       {...props}

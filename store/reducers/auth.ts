@@ -1,12 +1,19 @@
 import { AUTHENTICATE, LOGOUT, SET_DID_TRY_AL } from '../actions/auth';
+import { AnyAction } from 'redux';
 
-const initialState = {
-  token: null,
-  userId: null,
+interface State {
+  token: string;
+  userId: string;
+  didTryAutoLogin: boolean;
+}
+
+const initialState: State = {
+  token: '',
+  userId: '',
   didTryAutoLogin: false,
 };
 
-export default (state = initialState, action) => {
+export default (state = initialState, action: AnyAction) => {
   switch (action.type) {
     case AUTHENTICATE:
       return {

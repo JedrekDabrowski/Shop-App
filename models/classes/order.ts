@@ -1,12 +1,13 @@
 import moment from 'moment';
+import Product from './product';
 
 class Order {
-  constructor(id, items, totalAmount, date) {
-    this.id = id;
-    this.items = items;
-    this.totalAmount = totalAmount;
-    this.date = date;
-  }
+  constructor(
+    public id: string,
+    public items: [Product],
+    public totalAmount: number,
+    public date: Date
+  ) {}
 
   get readableDate() {
     //   return this.date.toLocaleDateString('en-EN', {

@@ -1,4 +1,6 @@
-import Product from '../../models/product';
+import { AnyAction } from 'redux';
+
+import Product from '../../models/classes/product';
 import {
   CREATE_PRODUCT,
   DELETE_PRODUCT,
@@ -6,12 +8,17 @@ import {
   UPDATE_PRODUCT,
 } from '../actions/products';
 
-const initialState = {
+interface State {
+  availableProducts: Product[];
+  userProducts: Product[];
+}
+
+const initialState: State = {
   availableProducts: [],
   userProducts: [],
 };
 
-export default (state = initialState, action) => {
+export default (state = initialState, action: AnyAction) => {
   switch (action.type) {
     case SET_PRODUCTS:
       return {
@@ -22,10 +29,10 @@ export default (state = initialState, action) => {
       return {
         // ...state,
         userProducts: state.userProducts.filter(
-          (prod) => prod.id !== action.productId
+          (prod: Product) => prod.id !== action.productId
         ),
         availableProducts: state.availableProducts.filter(
-          (prod) => prod.id !== action.productId
+          (prod: Product) => prod.id !== action.productId
         ),
       };
     case CREATE_PRODUCT:

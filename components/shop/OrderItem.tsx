@@ -4,8 +4,15 @@ import Colors from '../../constatans/Colors';
 
 import CartItem from './CartItem';
 import Card from '../ui/Card';
+import cartItem from '../../models/classes/cart-item';
+interface OrderItemProps {
+  amount: number;
+  date: Date;
+  items: cartItem[];
+  delete: boolean;
+}
 
-const OrderItem = (props) => {
+const OrderItem: React.FC<OrderItemProps> = (props) => {
   const [showDetails, setShowDetails] = useState(false);
   return (
     <Card style={styles.orderItem}>
@@ -24,7 +31,7 @@ const OrderItem = (props) => {
         <View style={styles.orderDetails}>
           {props.items.map((item) => (
             <CartItem
-              key={item.productId}
+              key={item.pushToken}
               quantity={item.quantity}
               amount={item.sum}
               title={item.productTitle}

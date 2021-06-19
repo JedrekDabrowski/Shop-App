@@ -8,14 +8,23 @@ import {
   ScrollView,
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
+import {
+  // NavigationScreenConfigProps,
+  NavigationParams,
+} from 'react-navigation';
+// import { StackNavigationOptions } from '@react-navigation/stack';
 
 import Colors from '../../constatans/Colors';
+import Product from '../../models/classes/product';
 import * as cartActions from '../../store/actions/cart';
+import { RootState } from '../../store/store';
 
-const ProductDetailScreen = (props) => {
+const ProductDetailScreen: React.FC<NavigationParams> = (props) => {
   const productId = props.route.params.productId;
-  const selectedProduct = useSelector((state) =>
-    state.products.availableProducts.find((prod) => prod.id === productId)
+  const selectedProduct = useSelector((state: RootState) =>
+    state.products.availableProducts.find(
+      (prod: Product) => prod.id === productId
+    )
   );
 
   const dispatch = useDispatch();
@@ -37,9 +46,13 @@ const ProductDetailScreen = (props) => {
   );
 };
 
-export const detailScreenOptions = (navData) => {
+// type Params = {
+//   route: NavigationParams;
+// };
+
+export const detailScreenOptions = ({ navigation }: any) => {
   return {
-    headerTitle: navData.route.params.productTitle,
+    headerTitle: navigation.route.params.productTitle,
   };
 };
 

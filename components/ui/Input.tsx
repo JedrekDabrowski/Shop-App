@@ -1,9 +1,29 @@
 import React, { useReducer, useEffect } from 'react';
-import { View, Text, TextInput, StyleSheet } from 'react-native';
+
+import {
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
+  ReturnKeyTypeOptions,
+  KeyboardTypeOptions,
+} from 'react-native';
 
 const INPUT_CHANGE = 'INPUT_CHANGE';
 const INPUT_BLUR = 'INPUT_BLUR';
-const inputReducer = (state, action) => {
+
+// interface Action {
+//   type: string;
+//   isValid?: boolean;
+//   value?: string;
+// }
+// interface State {
+//   touched: boolean;
+//   isValid: boolean;
+//   value: string;
+// }
+
+const inputReducer = (state: any, action: any) => {
   switch (action.type) {
     case INPUT_CHANGE:
       return {
@@ -21,7 +41,27 @@ const inputReducer = (state, action) => {
   }
 };
 
-const Input = (props) => {
+interface InputProps {
+  id: string;
+  initialValue?: string;
+  initiallyValid?: boolean;
+  label: string;
+  errorMsg: string;
+  required?: boolean;
+  email?: boolean;
+  min?: number;
+  max?: number;
+  minLength?: number;
+  onInputChange: (id: string, value: string, isValid: boolean) => void;
+  autoCapitalize?: 'none' | 'characters' | 'sentences' | 'words' | undefined;
+  keyboardType?: KeyboardTypeOptions | undefined;
+  autoCorrect?: boolean;
+  multiline?: boolean;
+  numberOfLines?: number;
+  returnKeyType?: ReturnKeyTypeOptions | undefined;
+}
+
+const Input: React.FC<InputProps> = (props) => {
   const [inputState, dispatch] = useReducer(inputReducer, {
     value: props.initialValue ? props.initialValue : '',
     isValid: props.initiallyValid,
@@ -36,7 +76,7 @@ const Input = (props) => {
     }
   }, [onInputChange, inputState, id]);
 
-  const textChangeHandler = (text) => {
+  const textChangeHandler = (text: string) => {
     const emailRegex =
       /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     let isValid = true;

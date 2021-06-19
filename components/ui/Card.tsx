@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 
-const Card = (props) => {
+const Card: React.FC<{ style: {} }> = (props) => {
   return (
     <View style={{ ...props.style, ...styles.card }}>{props.children}</View>
   );

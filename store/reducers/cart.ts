@@ -1,14 +1,21 @@
+import { AnyAction } from 'redux';
+
 import { ADD_TO_CART, REMOVE_FROM_CART } from '../actions/cart';
-import CartItem from '../../models/cart-item';
+import CartItem from '../../models/classes/cart-item';
 import { ADD_ORDER } from '../actions/orders';
 import { DELETE_PRODUCT } from '../actions/products';
 
-const initialState = {
-  items: {},
+interface State {
+  items: CartItem[];
+  totalAmount: number;
+}
+
+const initialState: State = {
+  items: [],
   totalAmount: 0,
 };
 
-export default (state = initialState, action) => {
+export default (state = initialState, action: AnyAction) => {
   switch (action.type) {
     case ADD_TO_CART:
       const addedProduct = action.product;
@@ -17,23 +24,35 @@ export default (state = initialState, action) => {
       const pushToken = addedProduct.pushToken;
 
       let updatedOrNewItem;
+      // class CartItem {
+      //   constructor(
+      //     public productId: string,
+      //     public productTitle: string,
+      //     public productPrice: number,
+      //     public quantity: number,
+      //     public sum: number,
+      //     public pushToken: string
+      //   ) {}
+      // }
 
       if (state.items[addedProduct.id]) {
         //already have the item in the cart
         updatedOrNewItem = new CartItem(
-          state.items[addedProduct.id].quantity + 1,
-          prodPrice,
+          addedProduct.id,
           prodTitle,
-          pushToken,
-          state.items[addedProduct.id].sum + prodPrice
+          prodPrice,
+          state.items[addedProduct.id].quantity + 1,
+          state.items[addedProduct.id].sum + prodPrice,
+          pushToken
         );
       } else {
         updatedOrNewItem = new CartItem(
+          addedProduct.id,
+          prodTitle,
+          prodPrice,
           1,
           prodPrice,
-          prodTitle,
-          pushToken,
-          prodPrice
+          pushToken
         );
       }
       return {
@@ -47,11 +66,12 @@ export default (state = initialState, action) => {
       let updatedCartItems;
       if (currentQuantity > 1) {
         const updatedCartItem = new CartItem(
-          selectedProduct.quantity - 1,
-          selectedProduct.productPrice,
+          selectedProduct.productId,
           selectedProduct.productTitle,
-          selectedProduct.pushToken,
-          selectedProduct.sum - selectedProduct.productPrice
+          selectedProduct.productPrice,
+          selectedProduct.quantity - 1,
+          selectedProduct.sum - selectedProduct.productPrice,
+          selectedProduct.pushToken
         );
         updatedCartItems = {
           ...state.items,

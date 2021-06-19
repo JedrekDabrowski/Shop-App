@@ -12,11 +12,14 @@ import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 
 import HeaderButton from '../../components/ui/HeaderButton';
 import OrderItem from '../../components/shop/OrderItem';
+import Colors from '../../constatans/Colors';
 import * as ordersActions from '../../store/actions/orders';
+import { RootState } from '../../store/store';
+// import { NavigationScreenConfigProps } from 'react-navigation';
 
-const OrdersScreen = (props) => {
+const OrdersScreen = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const orders = useSelector((state) => state.orders.orders);
+  const orders = useSelector((state: RootState) => state.orders.orders);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -52,6 +55,7 @@ const OrdersScreen = (props) => {
       keyExtractor={(item) => item.id}
       renderItem={(itemData) => (
         <OrderItem
+          key={itemData.item.readableDate}
           amount={itemData.item.totalAmount}
           date={itemData.item.readableDate}
           items={itemData.item.items}
@@ -62,7 +66,11 @@ const OrdersScreen = (props) => {
   );
 };
 
-export const orderScreenOptions = (navData) => {
+// type Params = {
+//   toggleDrawer: () => {};
+// };
+// NavigationScreenConfigProps<Params>
+export const orderScreenOptions = ({ navigation }: any) => {
   return {
     headertTitle: 'Your Orders',
     headerLeft: () => (
@@ -71,7 +79,7 @@ export const orderScreenOptions = (navData) => {
           title='Menu'
           iconName={Platform.OS === 'android' ? 'md-menu' : 'ios-menu'}
           onPress={() => {
-            navData.navigation.toggleDrawer();
+            navigation.toggleDrawer();
           }}
         />
       </HeaderButtons>

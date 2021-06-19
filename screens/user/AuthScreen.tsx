@@ -17,20 +17,42 @@ import Input from '../../components/ui/Input';
 import Card from '../../components/ui/Card';
 import Colors from '../../constatans/Colors';
 
-const formReducer = (state, action) => {
+interface FormState {
+  inputValues: {
+    email: string;
+    password: string;
+  };
+  inputValidated: {
+    email: boolean;
+    password: boolean;
+  };
+  formIsValid: boolean;
+}
+
+interface FormAction {
+  type: string;
+  input: string;
+  value: string;
+  isValid: boolean;
+}
+
+const formReducer = (state: FormState, action: FormAction) => {
   if (action.type === 'UPDATE') {
     const updatedValues = {
       ...state.inputValues,
       [action.input]: action.value,
     };
-    const updatedInputValidated = {
+    const updatedInputValidated: {
+      email: boolean;
+      password: boolean;
+    } = {
       ...state.inputValidated,
       [action.input]: action.isValid,
     };
     let updatedFormIsValid = true;
-    for (const key in updatedInputValidated) {
-      updatedFormIsValid = updatedFormIsValid && updatedInputValidated[key];
-    }
+    // for (const key in updatedInputValidated) {
+    //   updatedFormIsValid = updatedFormIsValid && updatedInputValidated[key];
+    // }
     return {
       formIsValid: updatedFormIsValid,
       inputValidated: updatedInputValidated,
@@ -40,10 +62,10 @@ const formReducer = (state, action) => {
   return state;
 };
 
-const AuthScreen = (props) => {
+const AuthScreen = () => {
   const [isSignup, setIsSignup] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState();
+  const [error, setError] = useState<null | string>();
   const dispatch = useDispatch();
 
   const [formState, dispatchFormState] = useReducer(formReducer, {
@@ -103,7 +125,7 @@ const AuthScreen = (props) => {
   return (
     <KeyboardAvoidingView
       style={styles.screen}
-      behavior={Platform.OS === 'ios' ? 'padding' : null}
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       keyboardVerticalOffset={Platform.select({ ios: 0, android: 500 })}
     >
       <LinearGradient colors={['#ffedff', '#ffe3ff']} style={styles.gradient}>

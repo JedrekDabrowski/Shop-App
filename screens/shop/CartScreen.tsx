@@ -10,27 +10,31 @@ import {
 import { useSelector, useDispatch } from 'react-redux';
 
 import Colors from '../../constatans/Colors';
-import CartItem from '../../components/shop/CartItem';
+import CartItemComponent from '../../components/shop/CartItem';
+import CartItem from '../../models/classes/cart-item';
 import Card from '../../components/ui/Card';
 import * as cartActions from '../../store/actions/cart';
 import * as ordersActions from '../../store/actions/orders';
-
-const CartScreen = (props) => {
+import { RootState } from '../../store/store';
+const CartScreen = () => {
   const [isLoading, setIsLoading] = useState(false);
 
-  const cartTotalAmount = useSelector((state) => state.cart.totalAmount);
+  const cartTotalAmount = useSelector(
+    (state: RootState) => state.cart.totalAmount
+  );
 
-  const cartItems = useSelector((state) => {
+  const cartItems = useSelector((state: RootState) => {
     const tranformedCartItems = [];
     for (const key in state.cart.items) {
-      tranformedCartItems.push({
-        productId: key,
-        productTitle: state.cart.items[key].productTitle,
-        productPrice: state.cart.items[key].productPrice,
-        quantity: state.cart.items[key].quantity,
-        sum: state.cart.items[key].sum,
-        productPushToken: state.cart.items[key].pushToken,
-      });
+      const cartItem = new CartItem(
+        key,
+        state.cart.items[key].productTitle,
+        state.cart.items[key].productPrice,
+        state.cart.items[key].quantity,
+        state.cart.items[key].sum,
+        state.cart.items[key].pushToken
+      );
+      tranformedCartItems.push(cartItem);
     }
 
     return tranformedCartItems.sort((a, b) =>
@@ -74,10 +78,10 @@ const CartScreen = (props) => {
         data={cartItems}
         keyExtractor={(item) => item.productId}
         renderItem={(itemData) => (
-          <CartItem
+          <CartItemComponent
             quantity={itemData.item.quantity}
             title={itemData.item.productTitle}
-            price={itemData.item.productPrice}
+            // price={itemData.item.productPrice}
             amount={itemData.item.sum}
             delete
             onRemove={() => {

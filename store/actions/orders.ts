@@ -1,10 +1,11 @@
-import Order from '../../models/order';
+import CartItem from '../../models/classes/cart-item';
+import Order from '../../models/classes/order';
 
 export const ADD_ORDER = 'ADD_ORDER';
 export const SET_ORDERS = 'SET_ORDERS';
 
 export const fetchOrders = () => {
-  return async (dispatch, getState) => {
+  return async (dispatch: Function, getState: Function) => {
     const userId = getState().auth.userId;
     try {
       const response = await fetch(
@@ -33,8 +34,8 @@ export const fetchOrders = () => {
   };
 };
 
-export const addOrder = (cartItems, totalAmount) => {
-  return async (dispatch, getState) => {
+export const addOrder = (cartItems: CartItem[], totalAmount: number) => {
+  return async (dispatch: Function, getState: Function) => {
     const token = getState().auth.token;
     const userId = getState().auth.userId;
     const date = new Date();
@@ -66,7 +67,7 @@ export const addOrder = (cartItems, totalAmount) => {
       },
     });
     for (const cartItem of cartItems) {
-      const pushToken = cartItem.productPushToken;
+      const pushToken = cartItem.pushToken;
       try {
         await fetch('https://exp.host/--/api/v2/push/send', {
           method: 'POST',

@@ -5,17 +5,21 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 export const AUTHENTICATE = 'AUTHENTICATE';
 export const LOGOUT = 'LOGOUT';
 export const SET_DID_TRY_AL = 'SET_DID_TRY_AL';
-let timer;
+let timer: ReturnType<typeof setTimeout>;
 
-export const authenticate = (userId, token, expiryTime) => {
-  return (dispatch) => {
+export const authenticate = (
+  userId: string,
+  token: string,
+  expiryTime: number
+) => {
+  return (dispatch: Function) => {
     dispatch(setLogoutTimer(expiryTime));
     dispatch({ type: AUTHENTICATE, userId: userId, token: token });
   };
 };
 
-export const signup = (email, password) => {
-  return async (dispatch) => {
+export const signup = (email: string, password: string) => {
+  return async (dispatch: Function) => {
     const response = await fetch(
       'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyA-RwoCUA2-gDNk315-UNFd30bBt3G_H6s',
       {
@@ -34,7 +38,7 @@ export const signup = (email, password) => {
     if (!response.ok) {
       resData = await response.json();
       let message = 'Something went wrong!';
-      if (errorId === 'EMAIL_EXISTS') {
+      if (resData.error.message === 'EMAIL_EXISTS') {
         message = 'This email exists already!';
       }
       throw new Error(message);
@@ -54,8 +58,8 @@ export const signup = (email, password) => {
     saveDataToStorage(resData.idToken, resData.localId, expirationDate);
   };
 };
-export const login = (email, password) => {
-  return async (dispatch) => {
+export const login = (email: string, password: string) => {
+  return async (dispatch: Function) => {
     const response = await fetch(
       'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyA-RwoCUA2-gDNk315-UNFd30bBt3G_H6s',
       {
@@ -105,7 +109,11 @@ export const logout = () => {
   };
 };
 
-const saveDataToStorage = (token, userId, expirationDate) => {
+const saveDataToStorage = (
+  token: string,
+  userId: string,
+  expirationDate: Date
+) => {
   AsyncStorage.setItem(
     'userData',
     JSON.stringify({
@@ -122,8 +130,8 @@ const clearLogoutTimer = () => {
   }
 };
 
-const setLogoutTimer = (expirationTime) => {
-  return (dispatch) => {
+const setLogoutTimer = (expirationTime: number) => {
+  return (dispatch: Function) => {
     timer = setTimeout(() => {
       dispatch(logout());
     }, expirationTime);
