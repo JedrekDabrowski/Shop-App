@@ -10,12 +10,13 @@ interface OrderItemProps {
   date: Date;
   items: cartItem[];
   delete: boolean;
+  orderKey: number;
 }
 
 const OrderItem: React.FC<OrderItemProps> = (props) => {
   const [showDetails, setShowDetails] = useState(false);
   return (
-    <Card style={styles.orderItem}>
+    <Card style={styles.orderItem} key={props.orderKey}>
       <View style={styles.summary}>
         <Text style={styles.amount}>{props.amount.toFixed(2)}$</Text>
         <Text style={styles.date}>{props.date}</Text>

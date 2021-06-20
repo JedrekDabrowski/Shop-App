@@ -79,9 +79,9 @@ const CartScreen = () => {
         keyExtractor={(item) => item.productId}
         renderItem={(itemData) => (
           <CartItemComponent
+            key={itemData.item.productId}
             quantity={itemData.item.quantity}
             title={itemData.item.productTitle}
-            // price={itemData.item.productPrice}
             amount={itemData.item.sum}
             delete
             onRemove={() => {

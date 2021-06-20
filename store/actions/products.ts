@@ -27,7 +27,7 @@ export const fetchProducts = () => {
           new Product(
             key,
             resData[key].ownerId,
-            resData[key].pushToken,
+            resData[key].ownerPushToken,
             resData[key].title,
             resData[key].imageUrl,
             resData[key].description,
@@ -116,7 +116,7 @@ export const createProduct = (
 };
 
 export const updateProduct = (
-  id: string,
+  id: string | null,
   title: string,
   description: string,
   imageUrl: string

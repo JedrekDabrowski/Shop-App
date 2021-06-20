@@ -24,16 +24,6 @@ export default (state = initialState, action: AnyAction) => {
       const pushToken = addedProduct.pushToken;
 
       let updatedOrNewItem;
-      // class CartItem {
-      //   constructor(
-      //     public productId: string,
-      //     public productTitle: string,
-      //     public productPrice: number,
-      //     public quantity: number,
-      //     public sum: number,
-      //     public pushToken: string
-      //   ) {}
-      // }
 
       if (state.items[addedProduct.id]) {
         //already have the item in the cart

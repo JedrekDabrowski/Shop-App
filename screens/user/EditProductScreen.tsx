@@ -10,7 +10,9 @@ import {
 } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { useSelector, useDispatch } from 'react-redux';
-import { NavigationParams } from 'react-navigation';
+import { RouteProp } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+// import { NavigationParams } from 'react-navigation';
 
 import HeaderButton from '../../components/ui/HeaderButton';
 import * as productsActions from '../../store/actions/products';
@@ -64,16 +66,37 @@ const formReducer = (state: FormState, action: FormAction) => {
   }
   return state;
 };
+type EditParamsList = {
+  Edit: { productId: string };
+};
 
-const EditProductScreen: React.FC<NavigationParams> = (props) => {
+type Props = {
+  route: RouteProp<EditParamsList, 'Edit'>;
+  navigation: StackNavigationProp<EditParamsList, 'Edit'>;
+};
+
+const EditProductScreen = ({ route, navigation }: Props) => {
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(false);
+  const [error, setError] = useState<boolean | string>(false);
 
-  const prodId = props.route.params ? props.route.params.productId : null;
-  const editedProduct = useSelector((state: RootState) =>
-    state.products.userProducts.find((prod: Product) => prod.id === prodId)
-  );
+  const prodId = route.params ? route.params.productId : null;
+  let editedProduct: Product | null;
+  if (prodId) {
+    editedProduct = useSelector((state: RootState) =>
+      state.products.userProducts.find((prod: Product) => prod.id === prodId)
+    );
+  } else {
+    editedProduct = null;
+  }
+
   const dispatch = useDispatch();
+
+  // const productId = route.params.productId;
+  //   const selectedProduct = useSelector((state: RootState) =>
+  //   state.products.availableProducts.find(
+  //     (prod: Product) => prod.id === productId
+  //   )
+  // );
 
   const [formState, dispatchFormState] = useReducer(formReducer, {
     inputValues: {
@@ -130,7 +153,7 @@ const EditProductScreen: React.FC<NavigationParams> = (props) => {
           )
         );
       }
-      props.navigation.goBack();
+      navigation.goBack();
     } catch (err) {
       setError(err.message);
     }
@@ -139,7 +162,7 @@ const EditProductScreen: React.FC<NavigationParams> = (props) => {
   }, [dispatch, prodId, formState]);
 
   useEffect(() => {
-    props.navigation.setOptions({
+    navigation.setOptions({
       headerRight: () => (
         <HeaderButtons HeaderButtonComponent={HeaderButton}>
           <Item
@@ -236,8 +259,8 @@ const EditProductScreen: React.FC<NavigationParams> = (props) => {
   );
 };
 
-export const editProdcutsScreenOptions = ({ navigation }: any) => {
-  const routeParams = navigation.route.params ? navigation.route.params : {};
+export const editProdcutsScreenOptions = ({ route }: any) => {
+  const routeParams = route.params ? route.params : {};
   return {
     headerTitle: routeParams.productId ? 'Edit Product' : 'Add Product',
   };

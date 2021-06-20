@@ -1,9 +1,11 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 
-const Card: React.FC<{ style: {} }> = (props) => {
+const Card: React.FC<{ style: {}; cardKey?: number }> = (props) => {
   return (
-    <View style={{ ...props.style, ...styles.card }}>{props.children}</View>
+    <View key={props.cardKey} style={{ ...props.style, ...styles.card }}>
+      {props.children}
+    </View>
   );
 };
 

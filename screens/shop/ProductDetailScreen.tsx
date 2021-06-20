@@ -8,19 +8,24 @@ import {
   ScrollView,
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
-import {
-  // NavigationScreenConfigProps,
-  NavigationParams,
-} from 'react-navigation';
-// import { StackNavigationOptions } from '@react-navigation/stack';
+
+import { RouteProp } from '@react-navigation/native';
 
 import Colors from '../../constatans/Colors';
 import Product from '../../models/classes/product';
 import * as cartActions from '../../store/actions/cart';
 import { RootState } from '../../store/store';
 
-const ProductDetailScreen: React.FC<NavigationParams> = (props) => {
-  const productId = props.route.params.productId;
+type ProductParamsList = {
+  ProductDetail: { productId: string; productTitle: string };
+};
+
+type Props = {
+  route: RouteProp<ProductParamsList, 'ProductDetail'>;
+};
+
+const ProductDetailScreen = ({ route }: Props) => {
+  const productId = route.params.productId;
   const selectedProduct = useSelector((state: RootState) =>
     state.products.availableProducts.find(
       (prod: Product) => prod.id === productId
@@ -46,13 +51,9 @@ const ProductDetailScreen: React.FC<NavigationParams> = (props) => {
   );
 };
 
-// type Params = {
-//   route: NavigationParams;
-// };
-
-export const detailScreenOptions = ({ navigation }: any) => {
+export const detailScreenOptions = ({ route }: Props) => {
   return {
-    headerTitle: navigation.route.params.productTitle,
+    headerTitle: route.params.productTitle,
   };
 };
 

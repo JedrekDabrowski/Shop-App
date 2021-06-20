@@ -15,7 +15,6 @@ import OrderItem from '../../components/shop/OrderItem';
 import Colors from '../../constatans/Colors';
 import * as ordersActions from '../../store/actions/orders';
 import { RootState } from '../../store/store';
-// import { NavigationScreenConfigProps } from 'react-navigation';
 
 const OrdersScreen = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -55,7 +54,7 @@ const OrdersScreen = () => {
       keyExtractor={(item) => item.id}
       renderItem={(itemData) => (
         <OrderItem
-          key={itemData.item.readableDate}
+          orderKey={+itemData.item.id}
           amount={itemData.item.totalAmount}
           date={itemData.item.readableDate}
           items={itemData.item.items}
@@ -66,10 +65,6 @@ const OrdersScreen = () => {
   );
 };
 
-// type Params = {
-//   toggleDrawer: () => {};
-// };
-// NavigationScreenConfigProps<Params>
 export const orderScreenOptions = ({ navigation }: any) => {
   return {
     headertTitle: 'Your Orders',

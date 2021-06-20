@@ -63,7 +63,9 @@ export default (state = initialState, action: AnyAction) => {
         action.productData.description,
         state.userProducts[productIndex].price
       );
+
       const updatedUserProducts = { ...state.userProducts };
+
       updatedUserProducts[productIndex] = updatedProduct;
       const availableProductIndex = state.availableProducts.findIndex(
         (prod) => prod.id === action.pid

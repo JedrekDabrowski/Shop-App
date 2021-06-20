@@ -41,7 +41,13 @@ const defaultNavOptions = {
   headerTintColor: Platform.OS === 'android' ? 'white' : Colors.primary,
 };
 
-const ProductsStackNavigator = createStackNavigator();
+type ProductParamsList = {
+  ProductsOverview: undefined;
+  ProductDetail: { productId: string; productTitle: string };
+  Cart: undefined;
+};
+
+const ProductsStackNavigator = createStackNavigator<ProductParamsList>();
 
 const ProductsNavigator = () => {
   return (

@@ -12,6 +12,7 @@ interface CartItemProps {
   title: string;
   quantity: number;
   amount: number;
+  key: string;
   delete?: boolean;
   onRemove?: () => void;
 }
@@ -51,7 +52,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
   },
   itemData: {
-    // flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
   },

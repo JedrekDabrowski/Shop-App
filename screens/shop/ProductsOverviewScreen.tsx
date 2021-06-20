@@ -127,7 +127,7 @@ const ProductsOverviewScreen: React.FC<NavigationParams> = (props) => {
   );
 };
 
-export const overviewScreenOptions = ({ navigation }: any) => {
+export const overviewScreenOptions = ({ navigation }: NavigationParams) => {
   return {
     headerTitle: 'All Products',
     headerRight: () => (
